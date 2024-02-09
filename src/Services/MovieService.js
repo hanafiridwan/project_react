@@ -40,6 +40,14 @@ const movies = [
         numberInstock: 7,
         dailyRentalRate: 6.5,
         publishDate: "2022-11-03"
+    },
+    {
+        _id: "876587658765",
+        title: "Godzilla",
+        genre: {_id: "121212232323", name: "Action"},
+        numberInstock: 7,
+        dailyRentalRate: 9.5,
+        publishDate: "2021-01-13"
     }
 ];
 
@@ -47,7 +55,7 @@ export function getMovies() {
     return movies; //bertujuan untuk nge get
 }
 
-export function getMovies(id){
+export function getMovie(id){
     return movies.find(m => m._id === id); //find ini berfungsi sebagai grouping / agar saat kita cari genre anime maka yang keluar anime semua. penamaan m ini bebas sesuai kebutuhan. 
 }
 
