@@ -2,7 +2,7 @@ import * as genresAPI from "./GenreMovies"
 
 const movies = [
     {
-        _id: "78787878787878",
+        _id: "787878787187878",
         title: "Cinta Fitri",
         genre: {_id: "9090909090909", name: "Love"},
         numberInstock: 6,
@@ -26,7 +26,7 @@ const movies = [
         publishDate: "2022-05-03"
     },
     {
-        _id: "876587658765",
+        _id: "8765870658765",
         title: "James Bound",
         genre: {_id: "121212232323", name: "Action"},
         numberInstock: 9,

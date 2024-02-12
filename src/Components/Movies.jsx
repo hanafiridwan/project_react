@@ -3,7 +3,12 @@ import { getMovies } from '../Services/MovieService'
 
 class Movies extends Component {
     state = {
-        Movies: getMovies()
+        movies: getMovies()
+    }
+
+    handleDelete = movie => {
+      const movies = this.state.movies.filter(m => m._id !== movie._id)
+      this.setState({movies})
     }
   render() {
     return (
@@ -21,16 +26,15 @@ class Movies extends Component {
                 </tr>
             </thead>
             <tbody>
-                {this.state.Movies.map(movie => (
+                {this.state.movies.map(movie => (
                     <tr key={movie._id}>
                         <td>{movie.title}</td>
-                        <td>{movie.genre.name}</td> {/* karena di movieservice nya masuk ke genre, id baru name nya */}
+                        <td>{movie.genre.name}</td>{/* karena di movieservice nya masuk ke genre, id baru name nya */}
                         <td>{movie.numberInstock}</td>
                         <td>{movie.dailyRentalRate}</td>
-                        <td><button>Hapus</button></td>
+                        <td><button className='btn btn-danger' onClick={() => this.handleDelete(movie)}>Hapus</button></td>
                     </tr>
                 ))}
-
             </tbody>
         </table>
       </>
