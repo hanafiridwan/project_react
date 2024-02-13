@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Like from './Love/Like'
 import { getMovies } from '../Services/MovieService'
 
 class Movies extends Component {
@@ -10,6 +11,11 @@ class Movies extends Component {
       const movies = this.state.movies.filter(m => m._id !== movie._id)
       this.setState({movies})
     }
+
+    handleLike = (movie) => {
+      console.log("ini sudah di like", movie)
+    }
+
   render() {
     return (
       <> 
@@ -22,6 +28,7 @@ class Movies extends Component {
                     <th>Genre</th>
                     <th>Stock</th>
                     <th>Rating</th>
+                    <th>Follow</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -32,6 +39,9 @@ class Movies extends Component {
                         <td>{movie.genre.name}</td>{/* karena di movieservice nya masuk ke genre, id baru name nya */}
                         <td>{movie.numberInstock}</td>
                         <td>{movie.dailyRentalRate}</td>
+                        <td>
+                          <Like liked={movie.liked} onClick={() => this.handleLike(movie)} /> {/* Like ini untuk memanggil file yang sudah diimport, liked untuk men triger functionnya . */}
+                        </td>
                         <td><button className='btn btn-danger' onClick={() => this.handleDelete(movie)}>Hapus</button></td>
                     </tr>
                 ))}
