@@ -13,7 +13,12 @@ class Movies extends Component {
     }
 
     handleLike = (movie) => {
-      console.log("ini sudah di like", movie)
+      // console.log("ini sudah di like", movie)
+      const movies = [...this.state.movies]; //kita buat variabel untuk mengambil state di atas
+      const index = movies.indexOf(movie); //lalu kita buat variabel index, kita panggil movies nya dan tambahkan indexOf(movie) supaya bisa men triger movieservice nya
+      movies[index] = {...movies[index]} //kita panggil movies dan indexnya dan kita separate/...
+      movies[index].liked = !movies[index].liked //kita panggil likenya dan kita isi: !movies[] dibaca jika movie belum disentuh maka buat putih like nya. !movies[index].liked dibaca jika movie sudah di baca maka tolong di liked atau buat jadi hitam hati nya
+      this.setState({movies})
     }
 
   render() {
