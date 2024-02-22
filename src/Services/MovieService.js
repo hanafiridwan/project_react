@@ -2,7 +2,7 @@ import * as genresAPI from "./GenreMovies"
 
 const movies = [
     {
-        _id: "787878787187878",
+        _id: "787878787187871",
         title: "Cinta Fitri",
         genre: {_id: "9090909090909", name: "Love"},
         numberInstock: 6,
@@ -10,7 +10,7 @@ const movies = [
         publishDate: "2022-01-03"
     },
     {
-        _id: "12121212128",
+        _id: "12121212121",
         title: "One Piece",
         genre: {_id: "88888888888", name: "Anime"},
         numberInstock: 7,
@@ -18,7 +18,7 @@ const movies = [
         publishDate: "2022-03-03"
     },
     {
-        _id: "123412341234",
+        _id: "12121212128",
         title: "Naruto",
         genre: {_id: "88888888888", name: "Anime"},
         numberInstock: 8,
@@ -34,7 +34,7 @@ const movies = [
         publishDate: "2022-01-10"
     },
     {
-        _id: "78787878787878",
+        _id: "787878787187878",
         title: "Cinta Di Pantai Pasir",
         genre: {_id: "9090909090909", name: "Love"},
         numberInstock: 7,
@@ -42,12 +42,44 @@ const movies = [
         publishDate: "2022-11-03"
     },
     {
-        _id: "876587658765",
+        _id: "8765870658763",
         title: "Godzilla",
         genre: {_id: "121212232323", name: "Action"},
         numberInstock: 7,
         dailyRentalRate: 9.5,
         publishDate: "2021-01-13"
+    },
+    {
+        _id: "8765870658764",
+        title: "Resident Evil",
+        genre: {_id: "121212232323", name: "Action"},
+        numberInstock: 6,
+        dailyRentalRate: 9.5,
+        publishDate: "2021-01-13"
+    },
+    {
+        _id: "3847834787",
+        title: "Habiebie dan Ainun",
+        genre: {_id: "9090909090909", name: "Love"},
+        numberInstock: 7,
+        dailyRentalRate: 9.5,
+        publishDate: "2012-11-03"
+    },
+    {
+        _id: "12121212122",
+        title: "Tensei Shitara Slime Datta",
+        genre: {_id: "88888888888", name: "Anime"},
+        numberInstock: 8,
+        dailyRentalRate: 8.5,
+        publishDate: "2020-05-03"
+    },
+    {
+        _id: "12121212123",
+        title: "Boruto",
+        genre: {_id: "88888888888", name: "Anime"},
+        numberInstock: 8,
+        dailyRentalRate: 6.5,
+        publishDate: "2022-05-22"
     }
 ];
 

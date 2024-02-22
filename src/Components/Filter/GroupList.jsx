@@ -19,7 +19,7 @@ const GroupList = (props) => {
   )
 }
 
-GroupList.defaultProops = {
+GroupList.defaultProps = {
   textProperty: "name",
   valueProperty: "_id"
 }

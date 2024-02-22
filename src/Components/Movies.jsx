@@ -1,10 +1,27 @@
+//ini folder
 import React, { Component } from 'react'
-import Like from './Love/Like'
-import { getMovies } from '../Services/MovieService'
+import Like from './Love/Like' 
+import GroupList from './Filter/GroupList'
+import Pagination from './Filter/Pagination'
+
+//ini fungsi
+import { getGenres } from '../Services/GenreMovies'
+import { paginate } from '../Pagination/Paginate'
+import { getMovies } from '../Services/MovieService' 
 
 class Movies extends Component {
     state = {
-        movies: getMovies()
+        movies: [], //getMovies() ganti jadi array atau [] agar lebih dinamis mengikuti datanya. 
+        genres: [],
+        currentPage: 1, //lihat pagination.jsx
+        pageSize: 4,
+        selectedGenre: null,
+    }
+
+    componentDidMount(){
+      const genres = [{ name: "All Genres" }, ...getGenres()]
+
+      this.setState({ movies: getMovies(), genres })
     }
 
     handleDelete = movie => {
@@ -21,37 +38,75 @@ class Movies extends Component {
       this.setState({movies})
     }
 
+    handlePageChange = page => {
+      this.setState({ currentPage: page })
+    }
+
+    handleGenreSelect = (genre) => {
+      this.setState({ selectedGenre: genre, currentPage: 1 })
+    }
+
   render() {
+    const  count = this.state.movies.length // ini ada berapa movie nya
+    const {pageSize, currentPage, selectedGenre, movies: allMovies} = this.state;
+    if(count === 0){
+      return <p>Film tidak ada</p>
+    }
+    const filtered = selectedGenre && selectedGenre._id ? allMovies.filter(m => m.genre._id === selectedGenre._id): allMovies
+    console.log(filtered);
+    const movies = paginate(filtered, currentPage, pageSize)
     return (
       <> 
-        {/* ini adalah fragmen yang membungkus elemen, bertujuan agar bisa mengatasi aturan dari react yang membatasi 1 elemen saja. Contohnya jika kita membuat eleman <p></p> maka kita tidak bisa membuat elemen p lagi karena sudah terpakai maka harus dibungkus dengan fragmen. */}
-        <p>Tampil Data</p>
-        <table className='table'>
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Genre</th>
-                    <th>Stock</th>
-                    <th>Rating</th>
-                    <th>Follow</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {this.state.movies.map(movie => (
-                    <tr key={movie._id}>
-                        <td>{movie.title}</td>
-                        <td>{movie.genre.name}</td>{/* karena di movieservice nya masuk ke genre, id baru name nya */}
-                        <td>{movie.numberInstock}</td>
-                        <td>{movie.dailyRentalRate}</td>
-                        <td>
-                          <Like liked={movie.liked} onClick={() => this.handleLike(movie)} /> {/* Like ini untuk memanggil file yang sudah diimport, liked untuk men triger functionnya . */}
-                        </td>
-                        <td><button className='btn btn-danger' onClick={() => this.handleDelete(movie)}>Hapus</button></td>
+
+        <div className="container">
+          <div className="row">
+            <div className="col-md-3">
+              <GroupList 
+                items={this.state.genres}
+                selectedItem={this.state.selectedGenre}
+                onItemSelect={this.handleGenreSelect}
+              />
+            </div>
+
+            <div className="col">
+              <p>Data ada {filtered.length} Movies</p>
+              <table className='table'>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Genre</th>
+                        <th>Stock</th>
+                        <th>Rating</th>
+                        <th>Follow</th>
+                        <th>Action</th>
                     </tr>
-                ))}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {movies.map(movie => ( //karena diatas sudah di this.state (di line 50), maka langsung movie saja dan hapus this.statenya
+                        <tr key={movie._id}>
+                            <td>{movie.title}</td>
+                            <td>{movie.genre.name}</td>{/* karena di movieservice nya masuk ke genre, id baru name nya */}
+                            <td>{movie.numberInstock}</td>
+                            <td>{movie.dailyRentalRate}</td>
+                            <td>
+                              <Like liked={movie.liked} onClick={() => this.handleLike(movie)} /> {/* Like ini untuk memanggil file yang sudah diimport, liked untuk men triger functionnya . */}
+                            </td>
+                            <td><button className='btn btn-danger' onClick={() => this.handleDelete(movie)}>Hapus</button></td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            {/* panggil paginationnya */}
+            <Pagination 
+                itemCount={filtered.length}
+                pageSize={pageSize}
+                currentPage={currentPage}
+                onPageChange={this.handlePageChange}
+            /> 
+            </div>
+          </div>
+        </div>
+        {/* ini adalah fragmen yang membungkus elemen, bertujuan agar bisa mengatasi aturan dari react yang membatasi 1 elemen saja. Contohnya jika kita membuat eleman <p></p> maka kita tidak bisa membuat elemen p lagi karena sudah terpakai maka harus dibungkus dengan fragmen. */}
       </>
     )
   }
