@@ -1,5 +1,5 @@
 import logo from './logo.svg';
-import { Redirect, Route, Router, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import './App.css';
 
 import Movies from './Components/Movies';
@@ -7,6 +7,7 @@ import Customer from './Components/Customer';
 import NotFound from './Components/NotFound';
 import Buy from './Components/Buy';
 import FormMovie from './Components/FormMovie';
+import Header from './Components/Header';
 
 function App() {
   return (
@@ -26,17 +27,23 @@ function App() {
     //     </a>
     //   </header>
     // </div>
-    <main className='container'>
-      <Switch>
-        <Router path="/movies" component={Movies}></Router>
-        <Router path="/customer" component={Customer}></Router>
-        <Router path="/buy" component={Buy}></Router>
-        <Router path="/not-found" component={NotFound}></Router>
-        <Redirect from="/" exact to="/movies" />
-        <Redirect to="not-found"/> {/*redirect ini berfungsi ketika sedang melakukan pencarian dengan huruf asal, maka akan muncul not found */}
-      </Switch>
-      <Movies />
-    </main>
+    <>
+      <Header />
+       <main className='container text-center'>
+        <div className='row'>
+          <Switch>
+            <Route path="/movies" component={Movies}></Route>
+            <Route path="/customer" component={Customer}></Route>
+            <Route path="/buy" component={Buy}></Route>
+            <Route path="/not-found" component={NotFound}></Route>
+            <Redirect from="/" exact to="/movies" />
+            <Redirect to="not-found"/> {/*redirect ini berfungsi ketika sedang melakukan pencarian dengan huruf asal, maka akan muncul not found */}
+          </Switch>
+          {/* karena moviesnya sudah dipanggil di atas jadi yg disini hapus saja */}
+        </div>
+       </main>
+    </>
+   
     
   );
 }
