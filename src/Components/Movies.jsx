@@ -1,6 +1,6 @@
 //ini folder
 import React, { Component } from 'react'
-import Like from './Love/Like' 
+// import Like from './Love/Like' sudah tidak digunakan karena sudah ada di MovieTable
 import GroupList from './Filter/GroupList'
 import Pagination from './Filter/Pagination'
 
@@ -8,6 +8,7 @@ import Pagination from './Filter/Pagination'
 import { getGenres } from '../Services/GenreMovies'
 import { paginate } from '../Pagination/Paginate'
 import { getMovies } from '../Services/MovieService' 
+import MoviesTable from './MoviesTable'
 
 class Movies extends Component {
     state = {
@@ -55,6 +56,7 @@ class Movies extends Component {
     const filtered = selectedGenre && selectedGenre._id ? allMovies.filter(m => m.genre._id === selectedGenre._id): allMovies
     console.log(filtered);
     const movies = paginate(filtered, currentPage, pageSize)
+
     return (
       <> 
 
@@ -70,32 +72,12 @@ class Movies extends Component {
 
             <div className="col">
               <p>Data ada {filtered.length} Movies</p>
-              <table className='table'>
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Genre</th>
-                        <th>Stock</th>
-                        <th>Rating</th>
-                        <th>Follow</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {movies.map(movie => ( //karena diatas sudah di this.state (di line 50), maka langsung movie saja dan hapus this.statenya
-                        <tr key={movie._id}>
-                            <td>{movie.title}</td>
-                            <td>{movie.genre.name}</td>{/* karena di movieservice nya masuk ke genre, id baru name nya */}
-                            <td>{movie.numberInstock}</td>
-                            <td>{movie.dailyRentalRate}</td>
-                            <td>
-                              <Like liked={movie.liked} onClick={() => this.handleLike(movie)} /> {/* Like ini untuk memanggil file yang sudah diimport, liked untuk men triger functionnya . */}
-                            </td>
-                            <td><button className='btn btn-danger' onClick={() => this.handleDelete(movie)}>Hapus</button></td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+
+            <MoviesTable 
+              movies={movies}
+              onLike={this.handleLike}
+              onDelete={this.handleDelete}
+            />
             {/* panggil paginationnya */}
             <Pagination 
                 itemCount={filtered.length}
