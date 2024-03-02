@@ -1,6 +1,6 @@
 //ini folder
 import React, { Component } from 'react'
-// import Like from './Love/Like' sudah tidak digunakan karena sudah ada di MovieTable
+// import Like from './Love/Like' sudah tidak digunakan karena sudah ada di MovieTable  
 import GroupList from './Filter/GroupList'
 import Pagination from './Filter/Pagination'
 
@@ -9,6 +9,7 @@ import { getGenres } from '../Services/GenreMovies'
 import { paginate } from '../Pagination/Paginate'
 import { getMovies } from '../Services/MovieService' 
 import MoviesTable from './MoviesTable'
+import _ from 'lodash'
 
 class Movies extends Component {
     state = {
@@ -17,10 +18,11 @@ class Movies extends Component {
         currentPage: 1, //lihat pagination.jsx
         pageSize: 4,
         selectedGenre: null,
+        sortColumn: {path: "title", order: "asc"}
     }
 
     componentDidMount(){
-      const genres = [{ name: "All Genres" }, ...getGenres()]
+      const genres = [{_id: "", name: "All Genres" }, ...getGenres()]
 
       this.setState({ movies: getMovies(), genres })
     }
@@ -47,15 +49,25 @@ class Movies extends Component {
       this.setState({ selectedGenre: genre, currentPage: 1 })
     }
 
+    handleSort = sortColumn => {
+      this.setState({ sortColumn   })
+    }
+
   render() {
     const  count = this.state.movies.length // ini ada berapa movie nya
-    const {pageSize, currentPage, selectedGenre, movies: allMovies} = this.state;
+    const {
+      pageSize, 
+      currentPage,
+      sortColumn, 
+      selectedGenre, 
+      movies: allMovies} = this.state;
     if(count === 0){
       return <p>Film tidak ada</p>
     }
     const filtered = selectedGenre && selectedGenre._id ? allMovies.filter(m => m.genre._id === selectedGenre._id): allMovies
     console.log(filtered);
-    const movies = paginate(filtered, currentPage, pageSize)
+    const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order])
+    const movies = paginate(sorted, currentPage, pageSize)
 
     return (
       <> 
@@ -75,8 +87,10 @@ class Movies extends Component {
 
             <MoviesTable 
               movies={movies}
+              sortColumn={sortColumn}
               onLike={this.handleLike}
               onDelete={this.handleDelete}
+              osShort={this.handleSort}
             />
             {/* panggil paginationnya */}
             <Pagination 
