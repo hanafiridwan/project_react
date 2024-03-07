@@ -1,34 +1,39 @@
 import React, {Component} from 'react'
 import Like from './Love/Like';
+import TableHeader from './Table/TableHeader';
 
 class MoviesTable extends Component { //ubah dari function ke class component
-    raiseShort = path => {
-        const sortColumn = {...this.props.sortColumn};
-        if(sortColumn.path === path){
-            sortColumn.order = sortColumn.order === "asc" ? "desc" : "asc"; //asc = ascrending, desc = descrending. ini agar urutan data bisa dimulai dari A - Z(asc), atau sebaliknya Z - A_desc
-        }else{
-            sortColumn.order = path;
-            sortColumn.order = "asc";
-        }
-        this.props.onSort(sortColumn);
-    }
+    // raiseShort = path => {
+    //     const sortColumn = {...this.props.sortColumn};
+    //     if(sortColumn.path === path){
+    //         sortColumn.order = sortColumn.order === "asc" ? "desc" : "asc"; //asc = ascrending, desc = descrending. ini agar urutan data bisa dimulai dari A - Z(asc), atau sebaliknya Z - A_desc
+    //     }else{
+    //         sortColumn.order = path;
+    //         sortColumn.order = "asc";
+    //     }
+    //     this.props.onSort(sortColumn);
+    // }
     // hasilnya sudah terlihat.
 
+    columns = [
+      {path : 'title', label: 'Title'},
+      {path : 'genre.name', label: 'Genre'},
+      {path : 'numberInStock', label: 'Stock'},
+      {path : 'dailyRentalRate', label: 'Rate'},
+      {key: 'Like'},
+      {key: 'Delete'}
+    ]
   render(){
-    const {movies, onLike, onDelete} = this.props;
+    const {movies, onLike, onDelete, onSort, sortColumn} = this.props;
 
     return (
       <table className='table'>
-          <thead>
-              <tr>
-                  <th onClick={() => this.raiseShort("title")}>Title</th>
-                  <th onClick={() => this.raiseShort("genre.name")}>Genre</th>
-                  <th onClick={() => this.raiseShort("numberInstock")}>Stock</th>
-                  <th onClick={() => this.raiseShort("dailyRentalRate")}>Rate</th>
-                  <th onClick={() => this.raiseShort("")}>Follow</th>
-                  <th onClick={() => this.raiseShort("")}>Action</th>
-              </tr>
-          </thead>
+         {/* pindahkan table head nya ke tableheader */}
+          <TableHeader 
+            columns={this.columns}
+            onSort={onSort}
+            sortColumn={sortColumn}
+          />
           <tbody>
               {movies.map(movie => ( //karena diatas sudah di this.state (di line 50), maka langsung movie saja dan hapus this.statenya
                   <tr key={movie._id}>

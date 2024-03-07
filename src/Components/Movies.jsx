@@ -90,7 +90,7 @@ class Movies extends Component {
               sortColumn={sortColumn}
               onLike={this.handleLike}
               onDelete={this.handleDelete}
-              osShort={this.handleSort}
+              onSort={this.handleSort}
             />
             {/* panggil paginationnya */}
             <Pagination 
