@@ -22,7 +22,7 @@ class MoviesTable extends Component { //ubah dari function ke class component
       {path : 'dailyRentalRate', label: 'Rate'},
       {key: 'Like'},
       {key: 'Delete'}
-    ]
+    ] //columns ini untuk di tableheader
   render(){
     const {movies, onLike, onDelete, onSort, sortColumn} = this.props;
 
