@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import Like from './Love/Like';
-import TableHeader from './Table/TableHeader';
+import Table from './Table/Table';
 
 class MoviesTable extends Component { //ubah dari function ke class component
     // raiseShort = path => {
@@ -20,38 +20,47 @@ class MoviesTable extends Component { //ubah dari function ke class component
       {path : 'genre.name', label: 'Genre'},
       {path : 'numberInStock', label: 'Stock'},
       {path : 'dailyRentalRate', label: 'Rate'},
-      {key: 'Like'},
-      {key: 'Delete'}
+      {key: 'Like', 
+        content:movie => <Like liked={movie.liked} onClick={() => this.props.onLike(movie)} />
+      },
+      {key: 'Delete',
+        content: movie => (
+          <button onClick={() => this.props.onDelete(movie)} className='btn btn-danger btn-sm'>
+            Delete
+          </button>
+        )
+      }
     ] //columns ini untuk di tableheader
   render(){
-    const {movies, onLike, onDelete, onSort, sortColumn} = this.props;
+    const {movies, onSort, sortColumn} = this.props;
 
     return (
-      <table className='table'>
-         {/* pindahkan table head nya ke tableheader */}
-          <TableHeader 
-            columns={this.columns}
-            onSort={onSort}
-            sortColumn={sortColumn}
-          />
-          <tbody>
-              {movies.map(movie => ( //karena diatas sudah di this.state (di line 50), maka langsung movie saja dan hapus this.statenya
-                  <tr key={movie._id}>
-                      <td>{movie.title}</td>
-                      <td>{movie.genre.name}</td>{/* karena di movieservice nya masuk ke genre, id baru name nya */}
-                      <td>{movie.numberInstock}</td>
-                      <td>{movie.dailyRentalRate}</td>
-                      <td>
-                      <Like liked={movie.liked} onClick={() => onLike(movie)} /> {/* Like ini untuk memanggil file yang sudah diimport, liked untuk men triger functionnya . */}
-                      </td>
-                      <td><button className='btn btn-danger' onClick={() => onDelete(movie)}>Hapus</button></td>
-                      {/* karena tablenya dipindahkan ke file yg berbeda, maka this.handleLike dan Deletenya diganti menjadi onLike dan onDelete */}
-                  </tr>
-              ))}
-          </tbody>
-      </table>
+      <Table 
+        columns={this.columns}
+        data={movies}
+        onSort={onSort}
+        sortColumn={sortColumn}
+      />
     )
   }
+  
 }
 
+{/* tbody disini dipindahkan ke faile TableBody dan disederhanakan */}
+{/* <tbody> */}
+  {/*{movies.map(movie => (  */}
+     {/* //karena diatas sudah di this.state (di line 50), maka langsung movie saja dan hapus this.statenya */}
+        {/* // <tr key={movie._id}>
+        //     <td>{movie.title}</td>
+        //     <td>{movie.genre.name}</td>karena di movieservice nya masuk ke genre, id baru name nya */}
+        {/* //     <td>{movie.numberInstock}</td>
+        //     <td>{movie.dailyRentalRate}</td>
+        //     <td>
+        //     <Like liked={movie.liked} onClick={() => onLike(movie)} /> Like ini untuk memanggil file yang sudah diimport, liked untuk men triger functionnya . */}
+        {/* //     </td>
+        //     <td><button className='btn btn-danger' onClick={() => onDelete(movie)}>Hapus</button></td>
+        //     karena tablenya dipindahkan ke file yg berbeda, maka this.handleLike dan Deletenya diganti menjadi onLike dan onDelete */}
+        {/* // </tr> */}
+    {/* ))} */}
+{/* </tbody> */}
 export default MoviesTable

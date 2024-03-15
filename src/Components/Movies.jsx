@@ -53,22 +53,33 @@ class Movies extends Component {
       this.setState({ sortColumn   })
     }
 
+    getPageData = () => {
+      const {
+        pageSize, 
+        currentPage,
+        sortColumn, 
+        selectedGenre, 
+        movies: allMovies} = this.state;
+
+      const filtered = selectedGenre && selectedGenre._id ? allMovies.filter(m => m.genre._id === selectedGenre._id): allMovies
+      const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order])
+      const movies = paginate(sorted, currentPage, pageSize)
+
+      return {totalCount: filtered.length, data: movies} //ini ngitung data ada berapa di movie
+    }
+
   render() {
     const  count = this.state.movies.length // ini ada berapa movie nya
     const {
       pageSize, 
       currentPage,
-      sortColumn, 
-      selectedGenre, 
-      movies: allMovies} = this.state;
+      sortColumn
+      } = this.state;
     if(count === 0){
       return <p>Film tidak ada</p>
     }
-    const filtered = selectedGenre && selectedGenre._id ? allMovies.filter(m => m.genre._id === selectedGenre._id): allMovies
-    console.log(filtered);
-    const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order])
-    const movies = paginate(sorted, currentPage, pageSize)
 
+    const {totalCount, data:movies} = this.getPageData();
     return (
       <> 
 
@@ -83,7 +94,7 @@ class Movies extends Component {
             </div>
 
             <div className="col">
-              <p>Data ada {filtered.length} Movies</p>
+              <p>Data ada {totalCount} Movies</p>
 
             <MoviesTable 
               movies={movies}
@@ -94,7 +105,7 @@ class Movies extends Component {
             />
             {/* panggil paginationnya */}
             <Pagination 
-                itemCount={filtered.length}
+                itemCount={totalCount}
                 pageSize={pageSize}
                 currentPage={currentPage}
                 onPageChange={this.handlePageChange}

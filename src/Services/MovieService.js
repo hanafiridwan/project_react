@@ -92,12 +92,15 @@ export function getMovie(id){
 }
 
 export function saveMovie(movie){
+    // Mencari film yang sesuai berdasarkan ID atau membuat objek kosong jika tidak ditemukan
     let movieInDb = movies.find(m => m._id === movie._id) || {};
+    // Mengisi atau memperbarui properti film berdasarkan data yang diterima
     movieInDb.name = movie.name;
     movieInDb.genre = genresAPI.genres.find(g => g._id === movie.genreId)
     movieInDb.numberInstock = movie.numberInstock
     movieInDb.dailyRentalRate = movie.dailyRentalRate
 
+     // Jika film belum memiliki ID, maka menetapkan ID baru dan menambahkannya ke array movies
     if(!movieInDb._id){
         movieInDb._id = Date.now();
         movies.push(movieInDb)
