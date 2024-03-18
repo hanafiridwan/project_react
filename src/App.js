@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import './App.css';
 
@@ -32,6 +32,7 @@ function App() {
        <main className='container text-center'>
         <div className='row'>
           <Switch>
+            <Route path="/movies/:id" component={FormMovie}></Route>
             <Route path="/movies" component={Movies}></Route>
             <Route path="/customer" component={Customer}></Route>
             <Route path="/buy" component={Buy}></Route>
