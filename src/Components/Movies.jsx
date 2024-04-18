@@ -5,7 +5,7 @@ import GroupList from './Filter/GroupList'
 import Pagination from './Filter/Pagination'
 
 //ini fungsi
-import { getGenres } from '../Services/GenreMovies'
+import  getGenres  from "../Services/GenreMovies";
 import { paginate } from '../Pagination/Paginate'
 import { getMovies } from '../Services/MovieService' 
 import MoviesTable from './MoviesTable'
@@ -20,11 +20,17 @@ class Movies extends Component {
         selectedGenre: null,
         sortColumn: {path: "title", order: "asc"}
     }
+    // componentDidMount(){
+    //   const genres = [{_id: "", name: "All Genres" }, ...getGenres()]
 
-    componentDidMount(){
-      const genres = [{_id: "", name: "All Genres" }, ...getGenres()]
+    //   this.setState({ movies: getMovies(), genres })
+    // }
+    async componentDidMount(){
+      const { data } = await getGenres();
+      const genres = [{_id: "", name: "All Genres" }, ...data]
 
-      this.setState({ movies: getMovies(), genres })
+      const { data: movies } = await getMovies()
+      this.setState({ movies, genres })
     }
 
     handleDelete = movie => {
