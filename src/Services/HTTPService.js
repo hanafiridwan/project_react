@@ -12,7 +12,7 @@ axios.interceptors.response.use(null, error => {
         logger.log(error);
     }
 
-    return Promise.reject(reject)
+    return Promise.reject(error)
 });
 
 export default {
