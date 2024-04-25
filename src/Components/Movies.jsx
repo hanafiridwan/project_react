@@ -7,7 +7,7 @@ import Pagination from './Filter/Pagination'
 //ini fungsi
 import  getGenres  from "../Services/GenreMovies";
 import { paginate } from '../Pagination/Paginate'
-import { getMovies } from '../Services/MovieService' 
+import { deleteMovie, getMovies } from '../Services/MovieService' 
 import MoviesTable from './MoviesTable'
 import _ from 'lodash'
 
@@ -33,9 +33,20 @@ class Movies extends Component {
       this.setState({ movies, genres })
     }
 
-    handleDelete = movie => {
-      const movies = this.state.movies.filter(m => m._id !== movie._id)
+    handleDelete = async movie => {
+      const originalMovies = this.state.movies;
+      // const movies = this.state.movies.filter(m => m._id !== movie._id)
+      const movies = originalMovies.filter(m => m._id !== movie._id)
       this.setState({movies})
+
+      try {
+        await deleteMovie(movie._id)
+      } catch (error) {
+        if(error.response && error.response.status === 404){
+          console.log("failed")
+          this.setState({movie: originalMovies})
+        }
+      }
     }
 
     handleLike = (movie) => {

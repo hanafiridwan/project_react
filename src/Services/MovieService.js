@@ -130,3 +130,7 @@ export function getMovies(){
 export function getMovie(movieId){
     return http.get(movieUrl(movieId))
 }
+
+export function deleteMovie(movieId){
+    return http.delete(movieUrl(movieId))
+} //lalu ke movie.jsx nah nanti hasilnya deletenya berfungsi kalau mau sampai data di databasenya juga ke hapus liat juga di movie.jsx bagian handledelete.
