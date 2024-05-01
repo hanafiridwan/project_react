@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 import logger from './LogService';
 import { reject } from "lodash";
 
