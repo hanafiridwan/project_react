@@ -13,10 +13,10 @@ import React from 'react'
 //     </div>
 //   )
 // }
-import { Form } from '../Components/Table/Form'
-import Joi from 'joi'
+import  Form  from '../Components/Table/Form'
+import Joi from 'joi-browser'
 import  getGenres  from "../Services/GenreMovies";
-import { deleteMovie, getMovie, saveMovies } from '../Services/MovieService' 
+import {  getMovie, saveMovie } from '../Services/MovieService' 
 
 class FormMovie extends Form {
 // ini data dari backend nya
@@ -28,7 +28,7 @@ class FormMovie extends Form {
       dailyRentalRate: ""
     },
     genres: [],
-    error: {} //error ini fungsinya untuk nge lock(butuh gak butuh)
+    errors: {} //error ini fungsinya untuk nge lock(butuh gak butuh)
   }
   // sekarang kita validasi backend / panggil backend
   scheme = {
@@ -56,16 +56,19 @@ class FormMovie extends Form {
     this.setState({genres})
   }
 
-  async populateMovie(){
-    try{
+  async populateMovie() {
+    try {
       const movieId = this.props.match.params.id;
-      if(movieId === "new") return;
-
-      const {data: movie} = await getMovie(movieId);
-      this.setState({data: this.mapToViewModel(movie)});
-    }catch (error){ //kata error ini bisa diganti
-      if(error.response && error.response.status === 404){
-        this.props.history.replace("/not-found")
+      if (movieId === "new") return;
+  
+      const { data: movie } = await getMovie(movieId);
+      this.setState({ data: this.mapToViewModel(movie) });
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        this.props.history.replace("/not-found");
+      } else {
+        // Penanganan kasus ketika objek error tidak memiliki properti response
+        console.error("Error:", error);
       }
     }
   }
@@ -75,27 +78,48 @@ class FormMovie extends Form {
     await this.populateMovie();
   }
 
-  mapToViewModel(model) {
+  mapToViewModel(movie) {
+    if (!movie) return {};
+  
     return {
-      _id: movie._id,
-      title: movie.title,
-      genre: movie.genre._id, //menyesuaikan id di genrenya (lihat backend nya)
-      numberInStock: movie.numberInStock,
-      dailyRentalRate: movie.dailyRentalRate
-    }
+      _id: movie._id || '',
+      title: movie.title || '',
+      genreId: movie.genre ? movie.genre._id : '',
+      numberInStock: movie.numberInStock || '',
+      dailyRentalRate: movie.dailyRentalRate || ''
+    };
   }
 
   //kita buat submit and kirim (bisa dalam satu)
   doSubmit = async () => {
-    await saveMovies(this.state.data) //saveMovies dari import diatas
+    await saveMovie(this.state.data) //saveMovies dari import diatas
+
+    this.props.history.push("/movies")
   }
+
+//   validate() {
+//   const options = { abortEarly: false };
+//   const { error } = Joi.object(this.schema).validate(this.state.data, options);
+//   if (!error) return null;
+
+//   const errors = {};
+//   for (let item of error.details) {
+//     errors[item.path[0]] = item.message;
+//   }
+//   return errors;
+// }
 
   render() {
     return(
       <div>
         <h1>Movie Form</h1>
-        <form onSubmit={this.handleSebmit}></form> 
+        <Form onSubmit={this.handleSubmit}></Form> 
         {/* handleSubmit diambil dari form.jsx */}
+          {this.renderInput("title", "Title")}
+          {this.renderSelect("genreId", "Genre", this.state.genres)}
+          {this.renderInput("numberInStock", "Number In Stock", "number")}
+          {this.renderInput("dailyRentalRate", "Rate")}
+          {this.renderButton("Save")}
       </div>
     )
   }

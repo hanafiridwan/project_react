@@ -10,14 +10,13 @@ export default class Form extends Component {
     errors: {}
   }
 
-  validate = () => {
+  validate = async () => {
     const options = {abortEarly: false} // ini supaya optionnya saat di klik kebawah
-    const {error} = Joi.validate(this.state.data, this.scheme, options)
-
+    const {error} = await Joi.object(this.schema).validateAsync(this.state.data, options);
     if(!error) return null;
 
     const errors = {};
-    for(let item of error.details) errors[item.path[0]] = item.message;
+    for(let item of error.details) errors[item.path[0]] = item.message; 
     return errors;
   }
 
@@ -28,17 +27,17 @@ export default class Form extends Component {
     return error ? error.details[0].message : null
   }
 
-  handleSubmit = end => {
-    end.preventDefault();
+  handleSubmit = e => {
+    e.preventDefault();
 
     const errors = this.validate();
     this.setState({errors: errors || {}})
 
     if(errors) return;
-    this.doSubmit();
+    this.props.onSubmit();
   }
 
-  handleChange = ({currentTarge: input}) => {
+  handleChange = ({currentTarget: input}) => {
     const errors = {...this.state.errors};
     const errorMessage = this.validateProperty(input);
     if(errorMessage) errors[input.name] = errorMessage
