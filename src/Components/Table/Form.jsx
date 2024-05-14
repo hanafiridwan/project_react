@@ -10,9 +10,9 @@ export default class Form extends Component {
     errors: {}
   }
 
-  validate = async () => {
+  validate = () => {
     const options = {abortEarly: false} // ini supaya optionnya saat di klik kebawah
-    const {error} = await Joi.object(this.schema).validateAsync(this.state.data, options);
+    const {error} = Joi.object( this.state.data, this.scheme, options);
     if(!error) return null;
 
     const errors = {};
@@ -22,7 +22,7 @@ export default class Form extends Component {
 
   validateProperty = ({name, value}) => {
     const obj = {[name]: value}
-    const schema = {[name]: this.schema[name]}
+    const schema = {[name]: this.scheme[name]}
     const {error} = Joi.validate(obj, schema)
     return error ? error.details[0].message : null
   }
@@ -34,7 +34,8 @@ export default class Form extends Component {
     this.setState({errors: errors || {}})
 
     if(errors) return;
-    this.props.onSubmit();
+    this.doSubmit();
+    // this.props.onSubmit();
   }
 
   handleChange = ({currentTarget: input}) => {
@@ -70,7 +71,7 @@ export default class Form extends Component {
   }
 
   renderInput(name, label, type="text"){
-    const{data, errors} = this.state
+    const {data, errors} = this.state
 
     return(
       <Input 

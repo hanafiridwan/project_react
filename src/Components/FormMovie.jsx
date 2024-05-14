@@ -79,14 +79,14 @@ class FormMovie extends Form {
   }
 
   mapToViewModel(movie) {
-    if (!movie) return {};
+    // if (!movie) return {};
   
     return {
-      _id: movie._id || '',
-      title: movie.title || '',
-      genreId: movie.genre ? movie.genre._id : '',
-      numberInStock: movie.numberInStock || '',
-      dailyRentalRate: movie.dailyRentalRate || ''
+      _id: movie._id,
+      title: movie.title,
+      genreId: movie.genre._id,
+      numberInStock: movie.numberInStock,
+      dailyRentalRate: movie.dailyRentalRate
     };
   }
 
@@ -113,7 +113,7 @@ class FormMovie extends Form {
     return(
       <div>
         <h1>Movie Form</h1>
-        <Form onSubmit={this.handleSubmit}></Form> 
+        <form onSubmit={this.handleSubmit}></form> 
         {/* handleSubmit diambil dari form.jsx */}
           {this.renderInput("title", "Title")}
           {this.renderSelect("genreId", "Genre", this.state.genres)}
@@ -127,4 +127,4 @@ class FormMovie extends Form {
 }
 
 
-export default FormMovie
+export default FormMovie;
